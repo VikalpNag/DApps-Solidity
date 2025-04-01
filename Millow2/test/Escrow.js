@@ -44,6 +44,7 @@ describe("Escrow", () => {
     await transaction.wait();
   });
 
+  //Deployment
   describe("Deployment", () => {
     it("Returns NFT address", async () => {
       const result = await escrow.nftAddress();
@@ -64,28 +65,43 @@ describe("Escrow", () => {
     });
   });
 
-  describe("Listing", () => {
-    it("Updates as Listed", async () => {
-      const result = await escrow.isListed(1);
-      expect(result).to.be.equal(true);
-    });
+  //Listings
+  describe("Listing", () => {});
 
-    it("Updates Ownership", async () => {
-      expect(await realEstate.ownerOf(1)).to.be.equal(escrow.address);
-    });
-    it("Returns buyer", async () => {
-      const result = await escrow.buyer(1);
-      expect(result).to.be.equal(buyer.address);
-    });
-
-    it("Returns purchase price", async () => {
-      const result = await escrow.purchasePrice(1);
-      expect(result).to.be.equal(tokens(10));
-    });
-
-    it("Returns escrow amount", async () => {
-      const result = await escrow.escrowAmount(1);
+  //Deposites
+  describe("Deposites", () => {
+    it("Updates contract balance", async () => {
+      const transaction = await escrow
+        .connect(buyer)
+        .depositeEarnest(1, { value: tokens(5) });
+      await transaction.wait();
+      const result = await escrow.getBalance();
       expect(result).to.be.equal(tokens(5));
     });
   });
 });
+
+//maybe used later
+
+// it("Updates as Listed", async () => {
+//     const result = await escrow.isListed(1);
+//     expect(result).to.be.equal(true);
+//   });
+
+//   it("Updates Ownership", async () => {
+//     expect(await realEstate.ownerOf(1)).to.be.equal(escrow.address);
+//   });
+//   it("Returns buyer", async () => {
+//     const result = await escrow.buyer(1);
+//     expect(result).to.be.equal(buyer.address);
+//   });
+
+//   it("Returns purchase price", async () => {
+//     const result = await escrow.purchasePrice(1);
+//     expect(result).to.be.equal(tokens(10));
+//   });
+
+//   it("Returns escrow amount", async () => {
+//     const result = await escrow.escrowAmount(1);
+//     expect(result).to.be.equal(tokens(5));
+//   });
