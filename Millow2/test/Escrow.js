@@ -8,7 +8,8 @@ const tokens = (n) => {
 describe("Escrow", () => {
   let buyer, seller, lender, inspector;
   let realEstate, escrow;
-  it("saves the addresses", async () => {
+
+  beforeEach(async () => {
     //Setup Accounts
     [buyer, seller, lender, inspector] = await ethers.getSigners();
 
@@ -28,14 +29,28 @@ describe("Escrow", () => {
     escrow = await Escrow.deploy(
       realEstate.address,
       seller.address,
-      lender.address,
-      inspector.address
+      inspector.address,
+      lender.address
     );
+  });
 
-    const result = await escrow.nftAddress();
-    expect(result).to.be.equal(realEstate.address);
+  describe("Deployment", () => {
+    it("Returns NFT address", async () => {
+      const result = await escrow.nftAddress();
+      expect(result).to.be.equal(realEstate.address);
+    });
 
-    const result2 = await escrow.seller();
-    expect(result2).to.be.equal(seller.address);
+    it("Returns seller", async () => {
+      const result2 = await escrow.seller();
+      expect(result2).to.be.equal(seller.address);
+    });
+    it("Returns inspector", async () => {
+      const result3 = await escrow.inspector();
+      expect(result3).to.be.equal(inspector.address);
+    });
+    it("Returns lender", async () => {
+      const result4 = await escrow.lender();
+      expect(result4).to.be.equal(lender.address);
+    });
   });
 });
