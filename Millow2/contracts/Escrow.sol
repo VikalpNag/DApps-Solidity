@@ -57,4 +57,10 @@ contract Escrow {
     function depositeEarnest(uint256 _nftID) public payable onlyBuyer(_nftID) {
         require(msg.value >= escrowAmount[_nftID]);
     }
+
+    receive() external payable {}
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
 }
