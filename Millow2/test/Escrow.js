@@ -119,4 +119,22 @@ describe("Escrow", () => {
       expect(result).to.be.equal(true); // Added missing assertion
     });
   });
+
+  //approval
+  describe("Approval", () => {
+    it("Updates approval status", async () => {
+      let transaction = await escrow.connect(buyer).approveSale(1);
+      await transaction.wait();
+
+      let transaction1 = await escrow.connect(seller).approveSale(1);
+      await transaction1.wait();
+
+      let transaction2 = await escrow.connect(lender).approveSale(1);
+      await transaction2.wait();
+
+      expect(await escrow.approval(1, buyer.address)).to.be.equal(true);
+      expect(await escrow.approval(1, seller.address)).to.be.equal(true);
+      expect(await escrow.approval(1, lender.address)).to.be.equal(true);
+    });
+  });
 });
