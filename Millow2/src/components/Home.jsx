@@ -4,7 +4,29 @@ import { useEffect, useState } from "react";
 import close from "../assets/close.svg";
 
 const Home = ({ home, provider, escrow, togglePop }) => {
-  console.log({ homeData: home });
+  const [buyer, setBuyer] = useState(null);
+  const [lender, setLender] = useState(null);
+  const [inspector, setInspector] = useState(null);
+  const [seller, setSeller] = useState(null);
+
+  const fetchDetails = async () => {
+    // --Buyer
+    const buyer = await escrow.buyer(home.id);
+    setBuyer(buyer);
+    // --Seller
+    const seller = await escrow.seller();
+    setSeller(seller);
+
+    // --Lender
+    const lender = await escrow.lender();
+    setLender(lender);
+
+    //--Inspector
+    const inspector = await escrow.inspector();
+    setInspector(inspector);
+  };
+
+  const buyHandler = () => {};
   return (
     <div className="home">
       <div className="home__details">
@@ -20,6 +42,24 @@ const Home = ({ home, provider, escrow, togglePop }) => {
           </p>
           <p>{home.address}</p>
           <h2>{home.attributes[0].value} ETH</h2>
+          <div>
+            <button className="home__buy" onClick={buyHandler}>
+              Buy
+            </button>
+            <button className="home__contact">Contact Agent</button>
+            <hr />
+            <h2>Overview</h2>
+            <p>{home.description}</p>
+            <hr />
+            <h2>Facts and Features</h2>
+            <ul>
+              {home.attributes.map((attribute, index) => (
+                <li key={index}>
+                  <strong>{attribute.trait_type}</strong> : {attribute.value}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <button onClick={togglePop} className="home__close">
           <img src={close} alt="Close" />
